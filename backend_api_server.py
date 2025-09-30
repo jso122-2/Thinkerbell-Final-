@@ -11,7 +11,6 @@ import logging
 import re
 from typing import List, Dict, Any, Optional
 from pathlib import Path
-import numpy as np
 import zipfile
 import io
 from datetime import datetime
@@ -20,6 +19,17 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+
+# Try to import numpy (optional for basic server functionality)
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+    # Create a dummy numpy for type hints
+    class DummyNumpy:
+        ndarray = list
+    np = DummyNumpy()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -184,8 +194,10 @@ class ModelService:
             logger.error(f"Failed to load fallback model: {e}")
             return False
     
-    def encode_texts(self, texts: List[str], normalize: bool = True) -> np.ndarray:
+    def encode_texts(self, texts: List[str], normalize: bool = True):
         """Encode texts to embeddings"""
+        if not HAS_ML_DEPS:
+            raise HTTPException(status_code=503, detail="ML dependencies not available")
         if not self.model:
             raise HTTPException(status_code=500, detail="Model not loaded")
         
@@ -197,6 +209,9 @@ class ModelService:
     
     def compute_similarity(self, text1: str, text2: str) -> float:
         """Compute cosine similarity between two texts"""
+        if not HAS_ML_DEPS or not HAS_NUMPY:
+            raise HTTPException(status_code=503, detail="ML dependencies not available")
+        
         embeddings = self.encode_texts([text1, text2])
         emb1, emb2 = embeddings[0], embeddings[1]
         
@@ -206,6 +221,8 @@ class ModelService:
     
     def search_similar(self, query: str, documents: List[str], top_k: int = 5) -> List[Dict[str, Any]]:
         """Find most similar documents to query"""
+        if not HAS_ML_DEPS or not HAS_NUMPY:
+            raise HTTPException(status_code=503, detail="ML dependencies not available")
         if not documents:
             return []
         
@@ -244,14 +261,17 @@ class ModelService:
         
         # Get embedding statistics
         try:
-            embedding = self.encode_texts([content])[0]
-            analysis["embedding_stats"] = {
-                "dimension": len(embedding),
-                "mean": float(np.mean(embedding)),
-                "std": float(np.std(embedding)),
-                "min": float(np.min(embedding)),
-                "max": float(np.max(embedding))
-            }
+            if HAS_ML_DEPS and HAS_NUMPY:
+                embedding = self.encode_texts([content])[0]
+                analysis["embedding_stats"] = {
+                    "dimension": len(embedding),
+                    "mean": float(np.mean(embedding)),
+                    "std": float(np.std(embedding)),
+                    "min": float(np.min(embedding)),
+                    "max": float(np.max(embedding))
+                }
+            else:
+                analysis["embedding_stats"] = {"note": "ML dependencies not available"}
         except Exception as e:
             logger.warning(f"Could not compute embedding stats: {e}")
         
@@ -1476,6 +1496,20 @@ async def health():
             model_dimension=None,
             uptime_seconds=time.time() - start_time
         )
+
+@app.get("/status")
+async def status():
+    """Simple status endpoint for debugging"""
+    return {
+        "status": "running",
+        "timestamp": time.time(),
+        "uptime": time.time() - start_time,
+        "has_ml_deps": HAS_ML_DEPS,
+        "has_numpy": HAS_NUMPY,
+        "environment": ENV,
+        "port": PORT,
+        "host": HOST
+    }
 
 @app.post("/embed", response_model=EmbedResponse)
 async def embed(request: EmbedRequest):
