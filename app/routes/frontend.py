@@ -11,10 +11,8 @@ from ..core.config import settings
 
 router = APIRouter()
 
-# Mount static assets
-if settings.STATIC_DIR.exists():
-    router.mount("/assets", StaticFiles(directory=settings.STATIC_DIR / "assets"), name="assets")
-    router.mount("/static", StaticFiles(directory=settings.STATIC_DIR), name="static")
+# Static files will be mounted in the main app, not here
+# This avoids import issues during router creation
 
 @router.get("/")
 async def serve_frontend():

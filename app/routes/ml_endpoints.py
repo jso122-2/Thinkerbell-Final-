@@ -7,11 +7,9 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 
 from ..services.model_service import model_service
-from ..models.requests import (
+from ..models import (
     EmbedRequest, SimilarityRequest, SearchRequest, 
-    AnalyzeRequest, GenerateRequest
-)
-from ..models.responses import (
+    AnalyzeRequest, GenerateRequest,
     EmbedResponse, SimilarityResponse, SearchResponse,
     AnalyzeResponse, GenerateResponse
 )

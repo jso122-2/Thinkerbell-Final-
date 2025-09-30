@@ -7,8 +7,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
 from ..services.batch_service import batch_service
-from ..models.requests import BatchGenerateRequest
-from ..models.responses import BatchResponse
+from ..models import BatchGenerateRequest, BatchResponse
 
 router = APIRouter(prefix="/batch")
 

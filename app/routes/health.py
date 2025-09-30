@@ -8,7 +8,7 @@ from fastapi import APIRouter
 from ..core.config import settings
 from ..core.dependencies import get_dependency_status
 from ..services.model_service import model_service
-from ..models.responses import HealthResponse
+from ..models import HealthResponse
 
 router = APIRouter()
 

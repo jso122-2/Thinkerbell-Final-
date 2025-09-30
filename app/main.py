@@ -6,9 +6,10 @@ import logging
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .core.config import settings
-from .routes import health_router, ml_router, batch_router, frontend_router
+from .routes import get_health_router, get_ml_router, get_batch_router, get_frontend_router
 
 # Configure logging
 logging.basicConfig(
@@ -37,18 +38,27 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     
+    # Mount static files if they exist
+    if settings.STATIC_DIR.exists():
+        try:
+            app.mount("/assets", StaticFiles(directory=settings.STATIC_DIR / "assets"), name="assets")
+            app.mount("/static", StaticFiles(directory=settings.STATIC_DIR), name="static")
+            logger.info("Static files mounted successfully")
+        except Exception as e:
+            logger.warning(f"Could not mount static files: {e}")
+    
     # Include routers in order of priority
     # Health checks first (most important for Railway)
-    app.include_router(health_router, tags=["Health"])
+    app.include_router(get_health_router(), tags=["Health"])
     
     # ML endpoints
-    app.include_router(ml_router, tags=["Machine Learning"])
+    app.include_router(get_ml_router(), tags=["Machine Learning"])
     
     # Batch processing
-    app.include_router(batch_router, tags=["Batch Processing"])
+    app.include_router(get_batch_router(), tags=["Batch Processing"])
     
     # Frontend routes LAST (catch-all routes)
-    app.include_router(frontend_router, tags=["Frontend"])
+    app.include_router(get_frontend_router(), tags=["Frontend"])
     
     return app
 

@@ -2,7 +2,13 @@
 Business logic and service layer
 """
 
-from .model_service import ModelService
-from .batch_service import BatchService
+# Use lazy imports to avoid circular dependencies
+def get_model_service():
+    from .model_service import model_service
+    return model_service
 
-__all__ = ["ModelService", "BatchService"]
+def get_batch_service():
+    from .batch_service import batch_service
+    return batch_service
+
+__all__ = ["get_model_service", "get_batch_service"]
