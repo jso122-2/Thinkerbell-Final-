@@ -2532,7 +2532,7 @@ Example: 'I need a contract for working with an Instagram influencer. They will 
                 const backendOnline = await checkBackendStatus();
                 
                 if (backendOnline) {
-                    const response = await fetch('http://localhost:8000/auto-detect', {
+                    const response = await fetch('/auto-detect', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -2724,7 +2724,7 @@ The total compensation for this engagement is $5,000 plus product gifting valued
         // Check backend status
         async function checkBackendStatus() {
             try {
-                const response = await fetch('http://localhost:8000/health');
+                const response = await fetch('/health');
                 const data = await response.json();
                 
                 // Update main status indicators
@@ -2790,7 +2790,7 @@ The total compensation for this engagement is $5,000 plus product gifting valued
                     // Detect key variables to help with parsing
                     const detectedVariables = detectKeyVariables(humanExample);
                     
-                    const response = await fetch('http://localhost:8000/generate', {
+                    const response = await fetch('/generate', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -3069,7 +3069,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
         }
 
         function exportJobsHistory() {
-            fetch('http://localhost:8000/batch/list')
+            fetch('/batch/list')
                 .then(response => response.json())
                 .then(data => {
                     const exportData = {
@@ -3110,7 +3110,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
                 let result;
                 
                 if (backendOnline) {
-                    const response = await fetch('http://localhost:8000/auto-detect', {
+                    const response = await fetch('/auto-detect', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -3378,7 +3378,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
                 const backendOnline = await checkBackendStatus();
                 
                 if (backendOnline) {
-                    const response = await fetch('http://localhost:8000/batch/generate', {
+                    const response = await fetch('/batch/generate', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -3423,7 +3423,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
             
             batchStatusInterval = setInterval(async () => {
                 try {
-                    const response = await fetch(`http://localhost:8000/batch/status/${currentBatchId}`);
+                    const response = await fetch(`/batch/status/${currentBatchId}`);
                     if (response.ok) {
                         const status = await response.json();
                         updateBatchStatusDisplay(status);
@@ -3520,7 +3520,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
 
         async function refreshBatchJobs() {
             try {
-                const response = await fetch('http://localhost:8000/batch/list');
+                const response = await fetch('/batch/list');
                 if (response.ok) {
                     const data = await response.json();
                     displayBatchJobs(data.batch_jobs);
@@ -3582,7 +3582,7 @@ Actual Length: ${currentResult.generation_metadata?.actual_length || 'N/A'} char
 
         async function downloadBatchResults(batchId) {
             try {
-                const response = await fetch(`http://localhost:8000/batch/download/${batchId}`);
+                const response = await fetch(`/batch/download/${batchId}`);
                 if (response.ok) {
                     const blob = await response.blob();
                     const url = window.URL.createObjectURL(blob);

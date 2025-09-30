@@ -1,0 +1,32 @@
+# Thinkerbell Docker Build & Push Commands
+# Copy and paste these commands one by one
+
+# 1. Navigate to project directory
+cd /home/black-cat/Documents/Thinkerbell
+
+# 2. Build production image (takes 10-15 minutes)
+docker build -f Dockerfile.production -t jacksono/thinkerbell:production -t jacksono/thinkerbell:latest .
+
+# 3. Check built images
+docker images | grep jacksono/thinkerbell
+
+# 4. Login to Docker Hub
+docker login
+
+# 5. Push production tag
+docker push jacksono/thinkerbell:production
+
+# 6. Push latest tag  
+docker push jacksono/thinkerbell:latest
+
+# 7. Verify push success
+docker search jacksono/thinkerbell
+
+# Optional: Test locally first
+# docker run -d -p 8000:8000 --name thinkerbell-test jacksono/thinkerbell:latest
+# docker stop thinkerbell-test && docker rm thinkerbell-test
+
+# For Railway deployment:
+# Image: jacksono/thinkerbell:latest
+# Port: 8000
+# Environment variables: See railway-env-vars.md

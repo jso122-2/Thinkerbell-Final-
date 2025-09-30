@@ -465,7 +465,7 @@ async def serve_home():
             <div class="container">
                 <h1>Thinkerbell ⚡</h1>
                 <p>AI-powered legal document generation</p>
-                <button class="cta" onclick="window.location.href='/model'">Use Model</button>
+                <button class="cta" onclick="window.location.reload()">Reload Page</button>
             </div>
         </body>
         </html>
@@ -619,7 +619,7 @@ Generated using Thinkerbell AI with semantic similarity matching.
         }
     )
 
-@app.get("/model/info")
+@app.get("/info")
 async def get_model_info():
     """Get information about the loaded model"""
     return model_service.get_model_info()

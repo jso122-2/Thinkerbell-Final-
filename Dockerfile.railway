@@ -1,16 +1,6 @@
-# Railway Full-Stack Dockerfile for Thinkerbell
-# Builds both frontend and backend for Railway deployment
+# Railway Dockerfile for Thinkerbell
+# Uses static HTML files instead of Vite build
 
-FROM node:20-slim as frontend-builder
-
-# Build frontend
-WORKDIR /frontend
-COPY thinkerbell/package*.json ./
-RUN npm ci
-COPY thinkerbell/ ./
-RUN npm run build
-
-# Python backend stage
 FROM python:3.11-slim
 
 # Set environment variables for Railway
@@ -57,8 +47,8 @@ COPY full_thinkerbell_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
-# Copy built frontend from frontend-builder stage
-COPY --from=frontend-builder /frontend/dist ./static
+# Copy static HTML files directly
+COPY static/ ./static/
 
 # Create all necessary directories in single layer
 RUN mkdir -p models logs data temp
