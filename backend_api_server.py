@@ -2,6 +2,7 @@
 """
 Enhanced Thinkerbell Backend API Server
 Serves the newly trained model with comprehensive endpoints
+Full-stack deployment with React frontend integration
 """
 
 import os
