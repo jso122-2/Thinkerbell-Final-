@@ -41,6 +41,7 @@ RUN pip install --no-cache-dir --timeout 600 --retries 2 \
     -r requirements_railway.txt
 
 # Copy application files in single layer
+COPY app/ ./app/
 COPY backend_api_server.py ./
 COPY test_server.py ./
 COPY config/ ./config/
@@ -59,5 +60,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --retries=2 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the test server first to debug
-CMD ["python", "test_server.py"]
+# Run the modular application
+CMD ["python", "-m", "app.main"]
