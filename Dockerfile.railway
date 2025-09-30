@@ -31,8 +31,8 @@ COPY backend_api_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
-# Copy model files (ensure these are in your repo or use Git LFS)
-COPY models/ ./models/
+# Create models directory - models will be downloaded at runtime
+RUN mkdir -p models
 
 # Create necessary directories
 RUN mkdir -p logs data temp
