@@ -306,6 +306,108 @@ async def generate_content(request: GenerateRequest):
     )
     return {"generated_text": generated_text}
 
+@app.post("/auto-detect")
+async def auto_detect_content_type(request: dict):
+    """Auto-detect content type and parameters"""
+    content = request.get("content", "") or request.get("text", "")
+    
+    if not content:
+        raise HTTPException(status_code=400, detail="No content provided")
+    
+    # Simple rule-based auto-detection
+    content_lower = content.lower()
+    word_count = len(content.split())
+    
+    # Detect document type
+    detected_type = "legal_template"
+    confidence = 0.7
+    
+    if "influencer" in content_lower or "instagram" in content_lower or "social media" in content_lower:
+        detected_type = "influencer_agreement"
+        confidence = 0.9
+    elif "content" in content_lower and ("article" in content_lower or "blog" in content_lower):
+        detected_type = "content_creation"
+        confidence = 0.8
+    elif "brand" in content_lower and "partnership" in content_lower:
+        detected_type = "brand_partnership"
+        confidence = 0.8
+    elif "marketing" in content_lower or "advertising" in content_lower:
+        detected_type = "marketing_agreement"
+        confidence = 0.8
+    
+    # Detect style preference
+    style_preference = "professional"
+    if "shall" in content_lower or "hereby" in content_lower or "whereas" in content_lower:
+        style_preference = "formal"
+    elif "detailed" in content_lower or "comprehensive" in content_lower:
+        style_preference = "detailed"
+    elif "business" in content_lower or "company" in content_lower:
+        style_preference = "business"
+    
+    # Detect target length based on input length
+    target_length = 700
+    if word_count < 50:
+        target_length = 500
+    elif word_count > 200:
+        target_length = 1200
+    elif word_count > 100:
+        target_length = 1000
+    
+    return {
+        "detected_type": detected_type,
+        "confidence": confidence,
+        "target_length": target_length,
+        "style_preference": style_preference,
+        "document_type": detected_type,
+        "confidence_scores": {
+            "overall": confidence,
+            "document_type": confidence,
+            "style": 0.8,
+            "length": 0.7
+        },
+        "reasoning": {
+            "target_length": f"Based on input length ({word_count} words)",
+            "style_preference": "Detected from content analysis",
+            "document_type": "Inferred from keywords and context"
+        }
+    }
+
+@app.post("/analyze")
+async def analyze_content(request: dict):
+    """Analyze content for specific patterns"""
+    content = request.get("content", "")
+    analyze_type = request.get("analyze_type", "influencer_agreement")
+    
+    if not content:
+        raise HTTPException(status_code=400, detail="No content provided")
+    
+    analysis_results = {"type": analyze_type, "findings": []}
+    
+    if analyze_type == "influencer_agreement":
+        keywords = {
+            "payment_terms": ["payment", "fee", "compensation", "remuneration"],
+            "deliverables": ["deliverable", "post", "story", "content", "campaign"],
+            "exclusivity": ["exclusive", "exclusivity", "sole"],
+            "termination": ["terminate", "termination", "cancel"],
+            "intellectual_property": ["IP", "intellectual property", "copyright", "ownership"]
+        }
+        
+        found_keywords = {k: [] for k in keywords}
+        for category, kws in keywords.items():
+            for kw in kws:
+                if kw.lower() in content.lower():
+                    found_keywords[category].append(kw)
+        
+        for category, found in found_keywords.items():
+            if found:
+                analysis_results["findings"].append(f"Found {category} related terms: {', '.join(found)}")
+            else:
+                analysis_results["findings"].append(f"No {category} related terms found.")
+    else:
+        analysis_results["findings"].append(f"Analysis type '{analyze_type}' not supported.")
+    
+    return {"analysis": analysis_results}
+
 @app.get("/info")
 async def get_info():
     """Get system information"""
@@ -323,7 +425,9 @@ async def get_info():
             "Mock ML responses for development",
             "Template-based content generation", 
             "Lightweight dependencies",
-            "Full API compatibility"
+            "Full API compatibility",
+            "Auto-detection support",
+            "Content analysis"
         ]
     }
 
