@@ -42,6 +42,8 @@ COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 COPY static/ ./static/
 COPY models/optimum-model/ ./models/optimum-model/
+# CRITICAL: Railway overrides env var to app/model/optimum-model - copy there too
+RUN mkdir -p app/model && cp -r models/optimum-model app/model/
 
 # Create all necessary directories in single layer
 RUN mkdir -p logs data temp
