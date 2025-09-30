@@ -28,9 +28,7 @@ COPY requirements_railway.txt ./
 # Install Python dependencies with Railway optimizations
 RUN pip install --no-cache-dir --timeout 600 --retries 2 \
     --index-url https://pypi.org/simple/ \
-    -r requirements_railway.txt && \
-    pip cache purge && \
-    rm -rf /root/.cache/pip
+    -r requirements_railway.txt
 
 # Copy only essential application files in single layer
 COPY full_thinkerbell_server.py ./
