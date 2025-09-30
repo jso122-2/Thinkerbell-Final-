@@ -1,0 +1,140 @@
+# Thinkerbell Git LFS Configuration
+# ==================================
+############################
+# Model Files - Git LFS
+############################
+# PyTorch model files
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+# TensorFlow model files
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.pb filter=lfs diff=lfs merge=lfs -text
+*.tflite filter=lfs diff=lfs merge=lfs -text
+# ONNX model files
+*.onnx filter=lfs diff=lfs merge=lfs -text
+# Pickle files (model weights)
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.pickle filter=lfs diff=lfs merge=lfs -text
+# Model-specific files
+pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+model.safetensors filter=lfs diff=lfs merge=lfs -text
+tf_model.h5 filter=lfs diff=lfs merge=lfs -text
+############################
+# Large Data Files - Git LFS
+############################
+# Compressed datasets
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.xz filter=lfs diff=lfs merge=lfs -text
+# Large data formats
+*.parquet filter=lfs diff=lfs merge=lfs -text
+*.feather filter=lfs diff=lfs merge=lfs -text
+*.hdf5 filter=lfs diff=lfs merge=lfs -text
+# Large JSON files (>10MB typically)
+*dataset*.json filter=lfs diff=lfs merge=lfs -text
+*training*.json filter=lfs diff=lfs merge=lfs -text
+############################
+# Binary Assets - Git LFS
+############################
+# Images
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.bmp filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+# Videos
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text
+# Audio
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
+# Archives
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+*.rar filter=lfs diff=lfs merge=lfs -text
+*.7z filter=lfs diff=lfs merge=lfs -text
+############################
+# Document Files - Git LFS
+############################
+# Large documents
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.docx filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+############################
+# Text Files - Standard Git
+############################
+# Keep text files in standard Git
+*.txt text
+*.md text
+*.json text
+*.yaml text
+*.yml text
+*.toml text
+*.ini text
+*.cfg text
+*.conf text
+# Code files
+*.py text
+*.js text
+*.ts text
+*.tsx text
+*.jsx text
+*.html text
+*.css text
+*.scss text
+*.sass text
+*.less text
+# Configuration files
+*.config text
+Dockerfile text
+Makefile text
+*.sh text
+*.bat text
+############################
+# Line Ending Configuration
+############################
+# Ensure consistent line endings
+*.py text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf
+Dockerfile text eol=lf
+Makefile text eol=lf
+# Windows-specific files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+############################
+# Special Cases
+############################
+# Small model config files - keep in standard Git
+config.json text
+tokenizer.json text
+tokenizer_config.json text
+vocab.txt text
+merges.txt text
+special_tokens_map.json text
+# Keep small sample files in standard Git
+sample*.json text
+test*.json text
+example*.json text
+# Exclude from language detection
+*.min.js linguist-generated=true
+*.min.css linguist-generated=true
+docs/* linguist-documentation=true
+models/optimum-model/model.safetensors filter=lfs diff=lfs merge=lfs -text

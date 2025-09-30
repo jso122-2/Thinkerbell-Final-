@@ -1,0 +1,260 @@
+# Thinkerbell Production .gitignore
+# =====================================
+
+############################
+# Python
+############################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.venv/
+venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+############################
+# Virtual Environments
+############################
+.venv/
+.venv_*/
+venv/
+env/
+ENV/
+.conda/
+.pyenv/
+
+############################
+# IDE & Editors
+############################
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+############################
+# Logs & Runtime
+############################
+*.log
+*.logsource
+logs/
+*.pid
+nohup.out
+
+############################
+# Temporary Files
+############################
+*.tmp
+*.bak
+*.backup
+~$*
+.cache/
+.temp/
+temp/
+
+############################
+# Model Files (Use Git LFS)
+############################
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.h5
+*.pkl
+*.pickle
+
+# Model directories - track structure, not weights
+models/*/pytorch_model.bin
+models/*/model.safetensors
+models/*/*.bin
+models/*/*.safetensors
+models/*/*.pt
+models/*/*.pth
+
+# Keep model configs and metadata
+!models/*/config.json
+!models/*/tokenizer.json
+!models/*/tokenizer_config.json
+!models/*/vocab.txt
+!models/*/merges.txt
+!models/*/special_tokens_map.json
+!models/*/README.md
+!models/*/model_card.md
+
+############################
+# Data Files
+############################
+*.csv
+*.json.gz
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.xlsx
+*.xls
+
+# Large datasets
+datasets/
+data/
+*.dataset/
+
+# Keep small config/sample files
+!config/*.json
+!style_profiles/*.json
+!**/sample*.json
+!**/test*.json
+
+############################
+# Build & Distribution
+############################
+build/
+dist/
+*.egg-info/
+.eggs/
+*.wheel
+
+############################
+# Docker
+############################
+.dockerignore
+docker-compose.override.yml
+.docker/
+
+############################
+# Node.js (if using React frontend)
+############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Frontend build outputs
+thinkerbell/dist/
+thinkerbell/build/
+thinkerbell/.next/
+
+############################
+# Environment & Secrets
+############################
+.env
+.env.*
+!.env.example
+.secrets/
+secrets.json
+api_keys.txt
+
+############################
+# OS Generated
+############################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+############################
+# Archive & Backup
+############################
+archive/
+archive_*/
+backup/
+backup_*/
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Keep deployment archives
+!deploy*.zip
+!release*.tar.gz
+
+############################
+# Testing & Coverage
+############################
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+############################
+# Jupyter Notebooks
+############################
+.ipynb_checkpoints/
+*.ipynb
+
+# Keep documentation notebooks
+!docs/**/*.ipynb
+!examples/**/*.ipynb
+
+############################
+# Database
+############################
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3
+database.db
+
+############################
+# Monitoring & Profiling
+############################
+.prof
+*.prof
+.memory_profiler
+.line_profiler
+
+############################
+# Production Specific
+############################
+# Runtime generated files
+stop.sh
+*.pid
+server.log
+access.log
+error.log
+
+# Deployment artifacts
+deployment/
+releases/
+.deploy/
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+############################
+# Git LFS Tracking
+############################
+# Large model files are tracked with Git LFS
+# See .gitattributes for LFS configuration
