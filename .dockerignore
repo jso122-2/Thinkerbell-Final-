@@ -37,6 +37,7 @@ logs/
 # Exclude txt files but keep requirements
 *.txt
 !requirements_railway.txt
+!requirements_minimal.txt
 
 # Exclude test files
 test_*.py
