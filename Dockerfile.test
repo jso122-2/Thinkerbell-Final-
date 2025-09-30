@@ -1,0 +1,25 @@
+# Minimal test Dockerfile for Railway debugging
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PORT=8000 \
+    HOST=0.0.0.0
+
+# Install minimal dependencies
+WORKDIR /app
+COPY requirements_railway.txt ./
+RUN pip install --no-cache-dir -r requirements_railway.txt
+
+# Copy test server
+COPY test_server.py ./
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run test server
+CMD ["python", "test_server.py"]
