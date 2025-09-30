@@ -44,6 +44,7 @@ RUN pip install --no-cache-dir --timeout 600 --retries 2 \
 COPY app/ ./app/
 COPY backend_api_server.py ./
 COPY test_server.py ./
+COPY debug_modular.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
@@ -60,5 +61,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --retries=2 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the modular application
-CMD ["python", "-m", "app.main"]
+# Run the debug version to identify startup issues
+CMD ["python", "debug_modular.py"]
