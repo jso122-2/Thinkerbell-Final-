@@ -1,0 +1,48 @@
+# Railway-Optimized Dockerfile for Thinkerbell
+# Lightweight, fast-building image for Railway deployment
+
+FROM python:3.11-slim
+
+# Set environment variables for Railway
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PORT=8000 \
+    HOST=0.0.0.0
+
+# Install system dependencies (minimal)
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements_production.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements_production.txt
+
+# Copy application files
+COPY backend_api_server.py ./
+COPY config/ ./config/
+COPY style_profiles/ ./style_profiles/
+
+# Copy model files (ensure these are in your repo or use Git LFS)
+COPY models/ ./models/
+
+# Create necessary directories
+RUN mkdir -p logs data temp
+
+# Expose port (Railway will override this)
+EXPOSE 8000
+
+# Health check for Railway
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the application
+CMD ["python", "backend_api_server.py"]

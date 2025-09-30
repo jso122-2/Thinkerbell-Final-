@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+startCommand = "python backend_api_server.py"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "always"
+
+[environments.production]
+variables = { THINKERBELL_ENV = "production" }

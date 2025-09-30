@@ -1,0 +1,41 @@
+# Railway-Optimized Configuration for Thinkerbell
+# Lightweight configuration for cloud deployment
+
+# API Configuration - Railway optimized
+api:
+  host: "0.0.0.0"
+  port: 8000  # Railway will override with $PORT
+  debug: false
+  workers: 1  # Railway provides single-instance scaling
+  timeout: 300
+
+# Model Configuration - Railway paths
+models:
+  semantic_model: "/app/models/thinkerbell-encoder-best"
+  cache_ttl_seconds: 1800  # Reduced for memory efficiency
+  embedding_cache_ttl_seconds: 900
+
+# Performance Settings - Railway optimized
+performance:
+  max_memory_mb: 512  # Railway memory limits
+  query_timeout_seconds: 30
+  cache_size: 1000  # Reduced cache size
+  max_batch_size: 16  # Smaller batches for Railway
+
+# Logging Configuration - Railway friendly
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  
+# Health Check Configuration
+health:
+  enabled: true
+  endpoint: "/health"
+  timeout: 10
+
+# CORS Configuration for web hosting
+cors:
+  allow_origins: ["*"]  # Configure with your domain in production
+  allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  allow_headers: ["*"]
+  allow_credentials: true
