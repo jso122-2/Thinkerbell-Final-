@@ -10,7 +10,8 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PORT=8000 \
     HOST=0.0.0.0 \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    THINKERBELL_MODEL_DIR=models/optimum-model
 
 # Install system dependencies (minimal) in single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -41,8 +42,6 @@ COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 COPY static/ ./static/
 COPY models/optimum-model/ ./models/optimum-model/
-# Also copy to the path Railway expects (app/model/optimum-model)
-RUN mkdir -p app/model && cp -r models/optimum-model app/model/
 
 # Create all necessary directories in single layer
 RUN mkdir -p logs data temp
