@@ -28,12 +28,15 @@ coverage.xml
 README.md
 DOCKER_*.md
 RAILWAY_*.md
-*.txt
 docs/
 logs/
 .gitignore
 .env
 .env.*
+
+# Exclude txt files but keep requirements
+*.txt
+!requirements_railway.txt
 
 # Exclude test files
 test_*.py
