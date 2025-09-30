@@ -41,6 +41,8 @@ COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 COPY static/ ./static/
 COPY models/optimum-model/ ./models/optimum-model/
+# Also copy to the path Railway expects (app/model/optimum-model)
+RUN mkdir -p app/model && cp -r models/optimum-model app/model/
 
 # Create all necessary directories in single layer
 RUN mkdir -p logs data temp

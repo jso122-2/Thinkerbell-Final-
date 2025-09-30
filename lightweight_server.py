@@ -441,6 +441,19 @@ async def analyze_content(request: dict):
     
     return {"analysis": analysis_results}
 
+@app.get("/debug-env")
+async def get_environment_debug():
+    """Debug endpoint to see environment variables"""
+    return {
+        "environment_variables": {
+            "THINKERBELL_MODEL_DIR": os.environ.get("THINKERBELL_MODEL_DIR", "NOT_SET"),
+            "PORT": os.environ.get("PORT", "NOT_SET"),
+            "HOST": os.environ.get("HOST", "NOT_SET"),
+            "THINKERBELL_ENV": os.environ.get("THINKERBELL_ENV", "NOT_SET"),
+        },
+        "all_env_vars": {k: v for k, v in os.environ.items() if "THINKERBELL" in k or "MODEL" in k}
+    }
+
 @app.get("/status")
 async def get_detailed_status():
     """Get detailed system status for debugging"""
@@ -504,7 +517,7 @@ async def get_info():
 async def serve_spa_routes(path: str):
     """Serve React SPA for frontend routes"""
     excluded_paths = [
-        "health", "status", "embed", "similarity", "search", "analyze", 
+        "health", "status", "debug-env", "embed", "similarity", "search", "analyze", 
         "generate", "info", "auto-detect", "batch"
     ]
     
