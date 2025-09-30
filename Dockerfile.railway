@@ -1,7 +1,7 @@
 # Railway Full-Stack Dockerfile for Thinkerbell
 # Builds both frontend and backend for Railway deployment
 
-FROM node:18-slim as frontend-builder
+FROM node:20-slim as frontend-builder
 
 # Build frontend
 WORKDIR /frontend
