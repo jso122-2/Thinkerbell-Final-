@@ -36,14 +36,16 @@ RUN pip install --no-cache-dir --timeout 600 --retries 2 \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
 
-# Copy lightweight server optimized for Railway
+# Copy full server that works in development
+COPY full_thinkerbell_server.py ./
 COPY lightweight_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 COPY static/ ./static/
+
+# Copy model files to BOTH expected locations
 COPY models/optimum-model/ ./models/optimum-model/
-# CRITICAL: Railway overrides env var to app/model/optimum-model - copy there too
-RUN mkdir -p app/model && cp -r models/optimum-model app/model/
+RUN mkdir -p app/model && cp -r models/optimum-model app/model/ && ls -la app/model/optimum-model/
 
 # Create all necessary directories in single layer
 RUN mkdir -p logs data temp
