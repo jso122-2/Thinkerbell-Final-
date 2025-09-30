@@ -36,7 +36,7 @@ except ImportError as e:
 # Configuration
 MODEL_DIR = os.environ.get(
     "THINKERBELL_MODEL_DIR", 
-    "/home/black-cat/Documents/Thinkerbell/Thinkerbell_template_pipeline/training/models/thinkerbell-encoder-best"
+    "models/optimum-model"
 )
 PORT = int(os.environ.get("PORT", 8000))
 HOST = os.environ.get("HOST", "0.0.0.0")

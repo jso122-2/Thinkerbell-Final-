@@ -1,0 +1,829 @@
+{
+  "summary": {
+    "total_tests": 20,
+    "successful_tests": 0,
+    "failed_tests": 20,
+    "success_rate": 0.0,
+    "unicode_categories_tested": 17,
+    "scripts_tested": 55,
+    "categories": [
+      "Cc",
+      "Cf",
+      "Ll",
+      "Lm",
+      "Lo",
+      "Lu",
+      "Mc",
+      "Mn",
+      "Nd",
+      "Pd",
+      "Pe",
+      "Po",
+      "Ps",
+      "Sc",
+      "Sm",
+      "So",
+      "Zs"
+    ],
+    "scripts": [
+      "APOSTROPHE",
+      "ARABIC",
+      "ARABIC-INDIC",
+      "ARTIST",
+      "BOWLING",
+      "BRIEFCASE",
+      "CAMERA",
+      "CIRCUS",
+      "CJK",
+      "CLAPPER",
+      "COLON",
+      "COMBINING",
+      "COMMA",
+      "CYRILLIC",
+      "DEVANAGARI",
+      "DIGIT",
+      "DIRECT",
+      "DOLLAR",
+      "EXCLAMATION",
+      "FIRE",
+      "FULL",
+      "FULLWIDTH",
+      "GAME",
+      "GEM",
+      "GLOWING",
+      "HANDSHAKE",
+      "HANGUL",
+      "HEBREW",
+      "HIRAGANA",
+      "HUNDRED",
+      "HYPHEN-MINUS",
+      "IDEOGRAPHIC",
+      "KATAKANA",
+      "KATAKANA-HIRAGANA",
+      "LATIN",
+      "LEFT",
+      "MATHEMATICAL",
+      "MEMO",
+      "MOBILE",
+      "MONEY",
+      "MUSICAL",
+      "NEW",
+      "PARTY",
+      "PERFORMING",
+      "PLUS",
+      "RIGHT",
+      "ROCKET",
+      "SPACE",
+      "SPARKLES",
+      "THAI",
+      "TROPHY",
+      "UNNAMED",
+      "VIDEO",
+      "WHITE",
+      "ZERO"
+    ]
+  },
+  "detailed_results": [
+    {
+      "test_name": "Basic Emojis",
+      "input_text": "I need a contract 📝 for social media marketing 📱. The influencer will post content 📸 and we'll pay them money 💰. This should be fun! 🎉",
+      "input_length": 134,
+      "input_byte_length": 149,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 134,
+        "byte_length": 149,
+        "categories": {
+          "Lu": 3,
+          "Zs": 26,
+          "Ll": 96,
+          "So": 5,
+          "Po": 4
+        },
+        "scripts": {
+          "LATIN": 99,
+          "SPACE": 26,
+          "MEMO": 1,
+          "MOBILE": 1,
+          "FULL": 2,
+          "CAMERA": 1,
+          "APOSTROPHE": 1,
+          "MONEY": 1,
+          "EXCLAMATION": 1,
+          "PARTY": 1
+        },
+        "has_emojis": true,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Emoji Overload",
+      "input_text": "🎉🚀💼📝✨🤝💰📱📸🎬🎭🌟💯🔥⭐🎯🏆💎🎪🎨🎵🎮🎲🎳🎯 Contract for influencer! 🎉🚀💼📝✨🤝💰📱📸🎬🎭🌟💯🔥⭐🎯🏆💎🎪🎨🎵🎮🎲🎳🎯",
+      "input_length": 76,
+      "input_byte_length": 222,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 76,
+        "byte_length": 222,
+        "categories": {
+          "So": 50,
+          "Zs": 4,
+          "Lu": 1,
+          "Ll": 20,
+          "Po": 1
+        },
+        "scripts": {
+          "PARTY": 2,
+          "ROCKET": 2,
+          "BRIEFCASE": 2,
+          "MEMO": 2,
+          "SPARKLES": 2,
+          "HANDSHAKE": 2,
+          "MONEY": 2,
+          "MOBILE": 2,
+          "CAMERA": 2,
+          "CLAPPER": 2,
+          "PERFORMING": 2,
+          "GLOWING": 2,
+          "HUNDRED": 2,
+          "FIRE": 2,
+          "WHITE": 2,
+          "DIRECT": 4,
+          "TROPHY": 2,
+          "GEM": 2,
+          "CIRCUS": 2,
+          "ARTIST": 2,
+          "MUSICAL": 2,
+          "VIDEO": 2,
+          "GAME": 2,
+          "BOWLING": 2,
+          "SPACE": 4,
+          "LATIN": 21,
+          "EXCLAMATION": 1
+        },
+        "has_emojis": true,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Spanish Text",
+      "input_text": "Necesito un contrato para marketing de influencers en redes sociales. El influencer publicará contenido sobre nuestros productos de belleza en Instagram y TikTok. El pago será de $5000 más productos gratuitos. La colaboración durará 3 meses con exclusividad en la categoría de belleza.",
+      "input_length": 285,
+      "input_byte_length": 291,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 285,
+        "byte_length": 291,
+        "categories": {
+          "Lu": 7,
+          "Ll": 226,
+          "Zs": 42,
+          "Po": 4,
+          "Sc": 1,
+          "Nd": 5
+        },
+        "scripts": {
+          "LATIN": 233,
+          "SPACE": 42,
+          "FULL": 4,
+          "DOLLAR": 1,
+          "DIGIT": 5
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "French with Accents",
+      "input_text": "J'ai besoin d'un contrat pour le marketing d'influence sur les réseaux sociaux. L'influenceur créera du contenu authentique pour notre marque de cosmétiques. La rémunération comprend un paiement fixe et une commission sur les ventes générées.",
+      "input_length": 242,
+      "input_byte_length": 250,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 242,
+        "byte_length": 250,
+        "categories": {
+          "Lu": 3,
+          "Po": 7,
+          "Ll": 198,
+          "Zs": 34
+        },
+        "scripts": {
+          "LATIN": 201,
+          "APOSTROPHE": 4,
+          "SPACE": 34,
+          "FULL": 3
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "German with Umlauts",
+      "input_text": "Ich benötige einen Vertrag für Influencer-Marketing in sozialen Medien. Der Influencer wird über unsere Schönheitsprodukte posten und dafür bezahlt werden. Die Zusammenarbeit soll professionell und authentisch sein.",
+      "input_length": 215,
+      "input_byte_length": 220,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 215,
+        "byte_length": 220,
+        "categories": {
+          "Lu": 10,
+          "Ll": 175,
+          "Zs": 26,
+          "Pd": 1,
+          "Po": 3
+        },
+        "scripts": {
+          "LATIN": 185,
+          "SPACE": 26,
+          "HYPHEN-MINUS": 1,
+          "FULL": 3
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Russian Cyrillic",
+      "input_text": "Мне нужен контракт для маркетинга в социальных сетях. Инфлюенсер будет публиковать контент о наших продуктах красоты в Instagram и TikTok. Оплата составит $3000 плюс бесплатные продукты.",
+      "input_length": 186,
+      "input_byte_length": 324,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 186,
+        "byte_length": 324,
+        "categories": {
+          "Lu": 6,
+          "Ll": 147,
+          "Zs": 25,
+          "Po": 3,
+          "Sc": 1,
+          "Nd": 4
+        },
+        "scripts": {
+          "CYRILLIC": 138,
+          "SPACE": 25,
+          "FULL": 3,
+          "LATIN": 15,
+          "DOLLAR": 1,
+          "DIGIT": 4
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Arabic RTL",
+      "input_text": "أحتاج إلى عقد للتسويق عبر وسائل التواصل الاجتماعي. سيقوم المؤثر بنشر محتوى عن منتجات الجمال الخاصة بنا على إنستغرام وتيك توك. الدفع سيكون ٥٠٠٠ دولار بالإضافة إلى منتجات مجانية.",
+      "input_length": 176,
+      "input_byte_length": 321,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 176,
+        "byte_length": 321,
+        "categories": {
+          "Lo": 141,
+          "Zs": 28,
+          "Po": 3,
+          "Nd": 4
+        },
+        "scripts": {
+          "ARABIC": 141,
+          "SPACE": 28,
+          "FULL": 3,
+          "ARABIC-INDIC": 4
+        },
+        "has_emojis": false,
+        "has_rtl": true,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Hebrew RTL",
+      "input_text": "אני צריך חוזה לשיווק ברשתות החברתיות. המשפיען יפרסם תוכן על מוצרי היופי שלנו באינסטגרם ובטיקטוק. התשלום יהיה ₪15,000 בתוספת מוצרים חינם.",
+      "input_length": 136,
+      "input_byte_length": 244,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 136,
+        "byte_length": 244,
+        "categories": {
+          "Lo": 106,
+          "Zs": 20,
+          "Po": 4,
+          "Sc": 1,
+          "Nd": 5
+        },
+        "scripts": {
+          "HEBREW": 106,
+          "SPACE": 20,
+          "FULL": 3,
+          "NEW": 1,
+          "DIGIT": 5,
+          "COMMA": 1
+        },
+        "has_emojis": false,
+        "has_rtl": true,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Japanese Mixed Scripts",
+      "input_text": "インフルエンサーマーケティングの契約が必要です。インフルエンサーは私たちの美容製品についてInstagramとTikTokに投稿します。報酬は$5000と無料製品です。3ヶ月間の独占契約です。",
+      "input_length": 96,
+      "input_byte_length": 246,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 96,
+        "byte_length": 246,
+        "categories": {
+          "Lo": 68,
+          "Lm": 3,
+          "Po": 4,
+          "Lu": 3,
+          "Ll": 12,
+          "Sc": 1,
+          "Nd": 5
+        },
+        "scripts": {
+          "KATAKANA": 21,
+          "KATAKANA-HIRAGANA": 3,
+          "HIRAGANA": 24,
+          "CJK": 23,
+          "IDEOGRAPHIC": 4,
+          "LATIN": 15,
+          "DOLLAR": 1,
+          "DIGIT": 5
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Chinese Simplified",
+      "input_text": "我需要一份社交媒体影响者营销合同。影响者将在Instagram和TikTok上发布关于我们美容产品的内容。报酬是5000美元加免费产品。合作期为3个月，在美容类别中具有独家性。",
+      "input_length": 88,
+      "input_byte_length": 224,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 88,
+        "byte_length": 224,
+        "categories": {
+          "Lo": 63,
+          "Po": 5,
+          "Lu": 3,
+          "Ll": 12,
+          "Nd": 5
+        },
+        "scripts": {
+          "CJK": 63,
+          "IDEOGRAPHIC": 4,
+          "LATIN": 15,
+          "DIGIT": 5,
+          "FULLWIDTH": 1
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": false,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Chinese Traditional",
+      "input_text": "我需要一份社交媒體影響者營銷合同。影響者將在Instagram和TikTok上發布關於我們美容產品的內容。報酬是5000美元加免費產品。合作期為3個月，在美容類別中具有獨家性。",
+      "input_length": 88,
+      "input_byte_length": 224,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 88,
+        "byte_length": 224,
+        "categories": {
+          "Lo": 63,
+          "Po": 5,
+          "Lu": 3,
+          "Ll": 12,
+          "Nd": 5
+        },
+        "scripts": {
+          "CJK": 63,
+          "IDEOGRAPHIC": 4,
+          "LATIN": 15,
+          "DIGIT": 5,
+          "FULLWIDTH": 1
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": false,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Korean Hangul",
+      "input_text": "소셜 미디어 인플루언서 마케팅 계약이 필요합니다. 인플루언서는 Instagram과 TikTok에서 우리 뷰티 제품에 대한 콘텐츠를 게시할 것입니다. 보상은 $5000와 무료 제품입니다.",
+      "input_length": 103,
+      "input_byte_length": 225,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 103,
+        "byte_length": 225,
+        "categories": {
+          "Lo": 61,
+          "Zs": 19,
+          "Po": 3,
+          "Lu": 3,
+          "Ll": 12,
+          "Sc": 1,
+          "Nd": 4
+        },
+        "scripts": {
+          "HANGUL": 61,
+          "SPACE": 19,
+          "FULL": 3,
+          "LATIN": 15,
+          "DOLLAR": 1,
+          "DIGIT": 4
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Thai Script",
+      "input_text": "ฉันต้องการสัญญาสำหรับการตลาดผ่านอินฟลูเอนเซอร์ในโซเชียลมีเดีย อินฟลูเอนเซอร์จะโพสต์เนื้อหาเกี่ยวกับผลิตภัณฑ์ความงามของเราใน Instagram และ TikTok",
+      "input_length": 144,
+      "input_byte_length": 394,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 144,
+        "byte_length": 394,
+        "categories": {
+          "Lo": 102,
+          "Mn": 23,
+          "Zs": 4,
+          "Lu": 3,
+          "Ll": 12
+        },
+        "scripts": {
+          "THAI": 125,
+          "SPACE": 4,
+          "LATIN": 15
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": false,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Hindi Devanagari",
+      "input_text": "मुझे सोशल मीडिया इन्फ्लुएंसर मार्केटिंग के लिए एक अनुबंध चाहिए। इन्फ्लुएंसर Instagram और TikTok पर हमारे ब्यूटी प्रोडक्ट्स के बारे में कंटेंट पोस्ट करेगा।",
+      "input_length": 154,
+      "input_byte_length": 386,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 154,
+        "byte_length": 386,
+        "categories": {
+          "Lo": 68,
+          "Mn": 31,
+          "Zs": 23,
+          "Mc": 15,
+          "Po": 2,
+          "Lu": 3,
+          "Ll": 12
+        },
+        "scripts": {
+          "DEVANAGARI": 116,
+          "SPACE": 23,
+          "LATIN": 15
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Mixed Languages",
+      "input_text": "I need a contrato for marketing en español, français, and 中文. The influencer will post contenido on Instagram y TikTok about notre produits de beauté 美容产品.",
+      "input_length": 155,
+      "input_byte_length": 170,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 155,
+        "byte_length": 170,
+        "categories": {
+          "Lu": 5,
+          "Zs": 25,
+          "Ll": 115,
+          "Po": 4,
+          "Lo": 6
+        },
+        "scripts": {
+          "LATIN": 120,
+          "SPACE": 25,
+          "COMMA": 2,
+          "CJK": 6,
+          "FULL": 2
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Unicode Control Characters",
+      "input_text": "Contract\u0000with\u0001control\u0002characters\u0003and\u0004zero\u0005width​‌‍﻿spaces",
+      "input_length": 57,
+      "input_byte_length": 65,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 57,
+        "byte_length": 65,
+        "categories": {
+          "Lu": 1,
+          "Ll": 46,
+          "Cc": 6,
+          "Cf": 4
+        },
+        "scripts": {
+          "LATIN": 47,
+          "UNNAMED": 6,
+          "ZERO": 4
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Combining Characters",
+      "input_text": "Contract with combining characters: é (e + ́), ñ (n + ̃), ü (u + ̈), å (a + ̊)",
+      "input_length": 78,
+      "input_byte_length": 86,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 78,
+        "byte_length": 86,
+        "categories": {
+          "Lu": 1,
+          "Ll": 38,
+          "Zs": 19,
+          "Po": 4,
+          "Ps": 4,
+          "Sm": 4,
+          "Mn": 4,
+          "Pe": 4
+        },
+        "scripts": {
+          "LATIN": 39,
+          "SPACE": 19,
+          "COLON": 1,
+          "LEFT": 4,
+          "PLUS": 4,
+          "COMBINING": 4,
+          "RIGHT": 4,
+          "COMMA": 3
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": false,
+          "NFKC": true,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Surrogate Pairs",
+      "input_text": "Contract with surrogate pairs: 𝕋𝕙𝕚𝕤 𝕚𝕤 𝕞𝕒𝕥𝕙𝕖𝕞𝕒𝕥𝕚𝕔𝕒𝕝 𝕕𝕠𝕦𝕓𝕝𝕖-𝕤𝕥𝕣𝕦𝕔𝕜 𝕔𝕙𝕒𝕣𝕒𝕔𝕥𝕖𝕣𝕤 🎭🎪🎨",
+      "input_length": 80,
+      "input_byte_length": 209,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 80,
+        "byte_length": 209,
+        "categories": {
+          "Lu": 2,
+          "Ll": 64,
+          "Zs": 9,
+          "Po": 1,
+          "Pd": 1,
+          "So": 3
+        },
+        "scripts": {
+          "LATIN": 26,
+          "SPACE": 9,
+          "COLON": 1,
+          "MATHEMATICAL": 40,
+          "HYPHEN-MINUS": 1,
+          "PERFORMING": 1,
+          "CIRCUS": 1,
+          "ARTIST": 1
+        },
+        "has_emojis": true,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": false,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Normalization NFC vs NFD",
+      "input_text": "Contract for café and café - these should look the same but have different Unicode representations",
+      "input_length": 99,
+      "input_byte_length": 101,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 99,
+        "byte_length": 101,
+        "categories": {
+          "Lu": 2,
+          "Ll": 80,
+          "Zs": 15,
+          "Mn": 1,
+          "Pd": 1
+        },
+        "scripts": {
+          "LATIN": 82,
+          "SPACE": 15,
+          "COMBINING": 1,
+          "HYPHEN-MINUS": 1
+        },
+        "has_emojis": false,
+        "has_rtl": false,
+        "normalization_forms": {
+          "NFC": false,
+          "NFD": false,
+          "NFKC": false,
+          "NFKD": false
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    },
+    {
+      "test_name": "Bidirectional Text",
+      "input_text": "Contract between Company Inc. and شركة التسويق الرقمي for marketing campaign on Instagram و TikTok with payment of $5000 و منتجات مجانية",
+      "input_length": 136,
+      "input_byte_length": 167,
+      "status_code": 500,
+      "success": false,
+      "unicode_analysis": {
+        "length": 136,
+        "byte_length": 167,
+        "categories": {
+          "Lu": 6,
+          "Ll": 72,
+          "Zs": 21,
+          "Po": 1,
+          "Lo": 31,
+          "Sc": 1,
+          "Nd": 4
+        },
+        "scripts": {
+          "LATIN": 78,
+          "SPACE": 21,
+          "FULL": 1,
+          "ARABIC": 31,
+          "DOLLAR": 1,
+          "DIGIT": 4
+        },
+        "has_emojis": false,
+        "has_rtl": true,
+        "normalization_forms": {
+          "NFC": true,
+          "NFD": true,
+          "NFKC": true,
+          "NFKD": true
+        }
+      },
+      "error": "{\"detail\":\"500: Encoding failed: [Errno 32] Broken pipe\"}"
+    }
+  ]
+}

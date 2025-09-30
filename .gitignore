@@ -257,4 +257,5 @@ releases/
 # Git LFS Tracking
 ############################
 # Large model files are tracked with Git LFS
-# See .gitattributes for LFS configuration
+# See .gitattributes for LFS configurationthinkerbell_env/
+thinkerbell_env/
