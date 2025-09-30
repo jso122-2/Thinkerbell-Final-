@@ -1842,9 +1842,16 @@ async def process_batch_generation(batch_id: str, batch_inputs: List[Dict[str, A
         batch_job["error"] = str(e)
         batch_job["completed_at"] = datetime.now().isoformat()
 
+# Catch-all route for SPA - handles both root and all paths
 @app.get("/")
-async def root():
-    """Serve the frontend at root"""
+@app.get("/{path:path}")
+async def serve_spa(path: str = ""):
+    """Serve the React SPA for root and all non-API routes"""
+    # Don't serve SPA for API endpoints, static files, or assets
+    api_paths = ["health", "status", "embed", "similarity", "search", "analyze", "generate", "model", "batch", "auto-detect"]
+    if path and (any(path.startswith(api_path) for api_path in api_paths) or path.startswith("static/") or path.startswith("assets/")):
+        raise HTTPException(status_code=404, detail="Not found")
+    
     static_file = Path("static/index.html")
     if static_file.exists():
         return FileResponse("static/index.html")
@@ -1868,21 +1875,6 @@ async def root():
                 "/auto-detect"
             ]
         }
-
-# Catch-all route for SPA - this must be LAST
-@app.get("/{path:path}")
-async def serve_spa(path: str):
-    """Serve the React SPA for all non-API routes"""
-    # Don't serve SPA for API endpoints, static files, or assets
-    api_paths = ["health", "status", "embed", "similarity", "search", "analyze", "generate", "model", "batch", "auto-detect"]
-    if any(path.startswith(api_path) for api_path in api_paths) or path.startswith("static/") or path.startswith("assets/"):
-        raise HTTPException(status_code=404, detail="Not found")
-    
-    static_file = Path("static/index.html")
-    if static_file.exists():
-        return FileResponse("static/index.html")
-    else:
-        return {"message": "Frontend not available", "api_available": True}
 
 def main():
     """Main function to run the server"""
