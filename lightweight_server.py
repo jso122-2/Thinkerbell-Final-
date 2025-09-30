@@ -503,7 +503,10 @@ async def get_info():
 @app.get("/{path:path}")
 async def serve_spa_routes(path: str):
     """Serve React SPA for frontend routes"""
-    excluded_paths = ["health", "embed", "similarity", "search", "generate", "info"]
+    excluded_paths = [
+        "health", "status", "embed", "similarity", "search", "analyze", 
+        "generate", "info", "auto-detect", "batch"
+    ]
     
     if any(path.startswith(ep) for ep in excluded_paths):
         raise HTTPException(status_code=404, detail="API endpoint not found")
