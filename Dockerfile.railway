@@ -36,7 +36,8 @@ RUN pip install --no-cache-dir --timeout 600 --retries 2 \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
 
-# Copy full server that works in development
+# Copy production server and dependencies
+COPY production_server.py ./
 COPY full_thinkerbell_server.py ./
 COPY lightweight_server.py ./
 COPY config/ ./config/

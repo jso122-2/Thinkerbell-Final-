@@ -9,9 +9,10 @@ requests==2.31.0
 python-dotenv==1.0.0
 pyyaml==6.0.1
 
-# ML stack (CPU-only, no CUDA) - Required for optimum model
-torch==2.1.0+cpu
+# Full ML stack - EXACTLY match development environment
+torch==2.1.0+cpu --find-links https://download.pytorch.org/whl/torch_stable.html
 transformers==4.35.0
 sentence-transformers==2.2.2
 numpy==1.24.3
 scikit-learn==1.3.0
+tokenizers==0.15.0
