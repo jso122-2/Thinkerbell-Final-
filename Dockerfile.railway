@@ -1,6 +1,16 @@
-# Railway-Optimized Dockerfile for Thinkerbell
-# Ultra-lightweight, fast-building image for Railway deployment
+# Railway Full-Stack Dockerfile for Thinkerbell
+# Builds both frontend and backend for Railway deployment
 
+FROM node:18-slim as frontend-builder
+
+# Build frontend
+WORKDIR /frontend
+COPY thinkerbell/package*.json ./
+RUN npm ci --only=production
+COPY thinkerbell/ ./
+RUN npm run build
+
+# Python backend stage
 FROM python:3.11-slim
 
 # Set environment variables for Railway
@@ -34,6 +44,9 @@ RUN pip install --no-cache-dir --timeout 600 --retries 2 \
 COPY backend_api_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
+
+# Copy built frontend from frontend-builder stage
+COPY --from=frontend-builder /frontend/dist ./static
 
 # Create all necessary directories in single layer
 RUN mkdir -p models logs data temp

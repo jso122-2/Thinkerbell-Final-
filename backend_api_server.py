@@ -17,6 +17,8 @@ from datetime import datetime
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import uvicorn
 
@@ -157,6 +159,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve static frontend files
+static_dir = Path("static")
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class ModelService:
     """Service class for model operations"""
@@ -1851,6 +1858,17 @@ async def root():
             "/auto-detect"
         ]
     }
+
+# Serve frontend for all non-API routes
+@app.get("/app")
+@app.get("/app/{path:path}")
+async def serve_frontend(path: str = ""):
+    """Serve the frontend application"""
+    static_file = Path("static/index.html")
+    if static_file.exists():
+        return FileResponse("static/index.html")
+    else:
+        return {"message": "Frontend not available", "api_available": True}
 
 def main():
     """Main function to run the server"""
