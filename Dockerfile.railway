@@ -50,8 +50,11 @@ COPY style_profiles/ ./style_profiles/
 # Copy static HTML files directly
 COPY static/ ./static/
 
+# Copy ML models
+COPY models/ ./models/
+
 # Create all necessary directories in single layer
-RUN mkdir -p models logs data temp
+RUN mkdir -p logs data temp
 
 # Expose port (Railway will override this)
 EXPOSE 8000

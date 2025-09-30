@@ -50,7 +50,7 @@ except ImportError as e:
     HAS_ML_DEPS = False
 
 # Configuration
-MODEL_DIR = os.environ.get("THINKERBELL_MODEL_DIR", "models/thinkerbell-encoder-best")
+MODEL_DIR = os.environ.get("THINKERBELL_MODEL_DIR", "models/optimum-model")
 PORT = int(os.environ.get("PORT", 8000))
 HOST = os.environ.get("HOST", "0.0.0.0")
 ENV = os.environ.get("THINKERBELL_ENV", "production")
