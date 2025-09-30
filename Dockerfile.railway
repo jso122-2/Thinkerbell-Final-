@@ -53,6 +53,8 @@ COPY bulletproof_server.py ./
 COPY basic_http_server.py ./
 COPY debug_health_check.py ./
 COPY working_server.py ./
+COPY thinkerbell_server.py ./
+COPY full_thinkerbell_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
