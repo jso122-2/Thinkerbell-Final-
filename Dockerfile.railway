@@ -47,6 +47,8 @@ COPY test_server.py ./
 COPY debug_modular.py ./
 COPY test_imports.py ./
 COPY simple_modular.py ./
+COPY startup_debug.py ./
+COPY port_test.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
@@ -63,5 +65,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --retries=2 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the fixed modular application
-CMD ["python", "-m", "app.main"]
+# Run startup diagnostic to see what's failing
+CMD ["python", "startup_debug.py"]
