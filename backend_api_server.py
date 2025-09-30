@@ -16,7 +16,7 @@ import zipfile
 import io
 from datetime import datetime
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -164,6 +164,9 @@ app.add_middleware(
 # Serve static frontend files
 static_dir = Path("static")
 if static_dir.exists():
+    # Mount static assets
+    app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+    # Mount other static files
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class ModelService:
@@ -1841,30 +1844,40 @@ async def process_batch_generation(batch_id: str, batch_inputs: List[Dict[str, A
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
-    try:
-        ms = get_model_service() if HAS_ML_DEPS else None
-        model_loaded = ms.model is not None if ms else False
-    except:
-        model_loaded = False
-        
-    return {
-        "message": "Thinkerbell Enhanced API",
-        "version": "2.0.0",
-        "model_loaded": model_loaded,
-        "ml_dependencies": HAS_ML_DEPS,
-        "endpoints": [
-            "/health", "/embed", "/similarity", "/search", "/analyze", "/generate", "/model/info",
-            "/batch/generate", "/batch/status/{batch_id}", "/batch/download/{batch_id}", "/batch/list",
-            "/auto-detect"
-        ]
-    }
+    """Serve the frontend at root"""
+    static_file = Path("static/index.html")
+    if static_file.exists():
+        return FileResponse("static/index.html")
+    else:
+        # Fallback to API info if frontend not available
+        try:
+            ms = get_model_service() if HAS_ML_DEPS else None
+            model_loaded = ms.model is not None if ms else False
+        except:
+            model_loaded = False
+            
+        return {
+            "message": "Thinkerbell Enhanced API",
+            "version": "2.0.0",
+            "model_loaded": model_loaded,
+            "ml_dependencies": HAS_ML_DEPS,
+            "note": "Frontend not available - API only mode",
+            "endpoints": [
+                "/health", "/embed", "/similarity", "/search", "/analyze", "/generate", "/model/info",
+                "/batch/generate", "/batch/status/{batch_id}", "/batch/download/{batch_id}", "/batch/list",
+                "/auto-detect"
+            ]
+        }
 
-# Serve frontend for all non-API routes
-@app.get("/app")
-@app.get("/app/{path:path}")
-async def serve_frontend(path: str = ""):
-    """Serve the frontend application"""
+# Catch-all route for SPA - this must be LAST
+@app.get("/{path:path}")
+async def serve_spa(path: str):
+    """Serve the React SPA for all non-API routes"""
+    # Don't serve SPA for API endpoints, static files, or assets
+    api_paths = ["health", "status", "embed", "similarity", "search", "analyze", "generate", "model", "batch", "auto-detect"]
+    if any(path.startswith(api_path) for api_path in api_paths) or path.startswith("static/") or path.startswith("assets/"):
+        raise HTTPException(status_code=404, detail="Not found")
+    
     static_file = Path("static/index.html")
     if static_file.exists():
         return FileResponse("static/index.html")
