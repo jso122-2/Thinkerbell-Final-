@@ -1,0 +1,76 @@
+# Exclude large unnecessary files to reduce build context
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+thinkerbell_env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/
+.mypy_cache/
+.pytest_cache/
+.hypothesis/
+
+# Exclude development files
+*.md
+README.md
+DOCKER_*.md
+RAILWAY_*.md
+*.txt
+docs/
+logs/
+.gitignore
+.env
+.env.*
+
+# Exclude test files
+test_*.py
+*_test.py
+*_tests.py
+master_test_runner.py
+comprehensive_model_test_suite.py
+adversarial_test_cases.py
+performance_stress_tests.py
+simple_model_test.py
+unicode_multilingual_tests.py
+
+# Exclude Docker files we don't need
+Dockerfile
+Dockerfile.production
+Dockerfile.simple
+docker-compose.yml
+docker-deploy.sh
+docker-hub-deploy.sh
+docker-manage.sh
+docker-desktop-amd64.deb
+
+# Exclude deployment scripts
+deploy.sh
+validate_production.sh
+start_*.sh
+
+# Exclude large directories
+thinkerbell/node_modules/
+thinkerbell/dist/
+thinkerbell/normalized_markdown/
+
+# Keep only what we need:
+# - app/ (modular code)
+# - models/optimum-model/ (ML model)
+# - static/ (frontend)
+# - config/ (configuration)
+# - style_profiles/ (needed for generation)
+# - full_thinkerbell_server.py (main server)
+# - requirements_railway.txt (dependencies)

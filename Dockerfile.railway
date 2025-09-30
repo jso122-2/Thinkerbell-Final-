@@ -28,30 +28,16 @@ COPY requirements_railway.txt ./
 # Install Python dependencies with Railway optimizations
 RUN pip install --no-cache-dir --timeout 600 --retries 2 \
     --index-url https://pypi.org/simple/ \
-    -r requirements_railway.txt
+    -r requirements_railway.txt && \
+    pip cache purge && \
+    rm -rf /root/.cache/pip
 
-# Copy application files in single layer
-COPY app/ ./app/
-COPY backend_api_server.py ./
-COPY test_server.py ./
-COPY debug_modular.py ./
-COPY test_imports.py ./
-COPY simple_modular.py ./
-COPY startup_debug.py ./
-COPY port_test.py ./
-COPY bulletproof_server.py ./
-COPY basic_http_server.py ./
-COPY debug_health_check.py ./
-COPY working_server.py ./
+# Copy only essential application files in single layer
 COPY full_thinkerbell_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
-
-# Copy static HTML files directly
 COPY static/ ./static/
-
-# Copy ML models
-COPY models/ ./models/
+COPY models/optimum-model/ ./models/optimum-model/
 
 # Create all necessary directories in single layer
 RUN mkdir -p logs data temp

@@ -11,9 +11,9 @@ requests==2.31.0
 python-dotenv==1.0.0
 pyyaml==6.0.1
 
-# ML dependencies for model functionality
-torch>=2.0.0
-transformers>=4.30.0
-sentence-transformers>=2.2.0
-numpy>=1.24.0
-scikit-learn>=1.3.0
+# ML dependencies for model functionality (specific versions for faster build)
+torch==2.1.0
+transformers==4.35.0
+sentence-transformers==2.2.2
+numpy==1.24.3
+scikit-learn==1.3.0
