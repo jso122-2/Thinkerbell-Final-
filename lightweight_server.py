@@ -84,30 +84,41 @@ class LightweightModelService:
         self._try_load_model()
     
     def _try_load_model(self):
-        """Load the actual optimum model"""
+        """Load the actual optimum model or fallback to standard model"""
         if not HAS_TORCH or not HAS_TRANSFORMERS:
             logger.info("🔄 ML dependencies not available - using mock responses")
             return
         
+        # Try loading the optimum model first
+        model_path = os.environ.get("THINKERBELL_MODEL_DIR", "models/optimum-model")
+        logger.info(f"🔄 Attempting to load optimum model from: {model_path}")
+        
         try:
-            # Load the actual optimum model
-            model_path = os.environ.get("THINKERBELL_MODEL_DIR", "models/optimum-model")
-            logger.info(f"🔄 Loading optimum model from: {model_path}")
-            
-            if not os.path.exists(model_path):
-                logger.error(f"❌ Model directory not found: {model_path}")
+            if os.path.exists(model_path):
+                from sentence_transformers import SentenceTransformer
+                logger.info(f"📂 Model directory exists, loading...")
+                self.model = SentenceTransformer(model_path)
+                self.model_loaded = True
+                logger.info("✅ Optimum model loaded successfully!")
                 return
-            
-            # Load the sentence transformer model
-            from sentence_transformers import SentenceTransformer
-            self.model = SentenceTransformer(model_path)
-            self.model_loaded = True
-            
-            logger.info("✅ Optimum model loaded successfully!")
-            
+            else:
+                logger.warning(f"⚠️ Model directory not found: {model_path}")
         except Exception as e:
             logger.error(f"❌ Failed to load optimum model: {e}")
-            logger.info("🔄 Falling back to mock responses")
+            logger.error(f"❌ Error type: {type(e).__name__}")
+            logger.error(f"❌ Error details: {str(e)}")
+        
+        # Fallback to a standard lightweight model
+        try:
+            logger.info("🔄 Trying fallback to standard sentence-transformers model...")
+            from sentence_transformers import SentenceTransformer
+            # Use a small, reliable model as fallback
+            self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            self.model_loaded = True
+            logger.info("✅ Fallback model (all-MiniLM-L6-v2) loaded successfully!")
+        except Exception as e:
+            logger.error(f"❌ Failed to load fallback model: {e}")
+            logger.info("🔄 Using mock responses only")
     
     def encode_texts(self, texts: List[str], normalize: bool = True) -> List[List[float]]:
         """Generate embeddings using the optimum model or fallback to mock"""
@@ -430,9 +441,45 @@ async def analyze_content(request: dict):
     
     return {"analysis": analysis_results}
 
+@app.get("/status")
+async def get_detailed_status():
+    """Get detailed system status for debugging"""
+    model_path = os.environ.get("THINKERBELL_MODEL_DIR", "models/optimum-model")
+    
+    return {
+        "app_name": "Thinkerbell Lightweight API",
+        "version": "2.0.0-lightweight",
+        "environment": ENV,
+        "host": HOST,
+        "port": PORT,
+        "ml_dependencies": {
+            "torch": HAS_TORCH,
+            "transformers": HAS_TRANSFORMERS,
+            "model_loaded": model_service.model_loaded
+        },
+        "model_info": {
+            "model_path": model_path,
+            "model_exists": os.path.exists(model_path),
+            "model_type": str(type(model_service.model).__name__) if model_service.model else None,
+            "model_loaded": model_service.model_loaded
+        },
+        "file_system": {
+            "current_directory": os.getcwd(),
+            "model_directory_exists": os.path.exists(model_path),
+            "model_files": os.listdir(model_path) if os.path.exists(model_path) else []
+        },
+        "features": [
+            "Real ML model loading with fallbacks",
+            "Template-based content generation", 
+            "Auto-detection support",
+            "Content analysis",
+            "Full API compatibility"
+        ]
+    }
+
 @app.get("/info")
 async def get_info():
-    """Get system information"""
+    """Get basic system information"""
     return {
         "app_name": "Thinkerbell Lightweight API",
         "version": "2.0.0-lightweight",
@@ -442,14 +489,13 @@ async def get_info():
             "transformers": HAS_TRANSFORMERS,
             "model_loaded": model_service.model_loaded
         },
-        "optimization": "Designed for Railway 5.5GB limit",
+        "optimization": "Designed for Railway with real ML models",
         "features": [
-            "Mock ML responses for development",
+            "Real ML model loading with fallbacks",
             "Template-based content generation", 
-            "Lightweight dependencies",
-            "Full API compatibility",
             "Auto-detection support",
-            "Content analysis"
+            "Content analysis",
+            "Full API compatibility"
         ]
     }
 
