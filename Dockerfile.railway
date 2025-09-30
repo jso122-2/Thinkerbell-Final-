@@ -1,5 +1,5 @@
 # Railway-Optimized Dockerfile for Thinkerbell
-# Lightweight, fast-building image for Railway deployment
+# Ultra-lightweight, fast-building image for Railway deployment
 
 FROM python:3.11-slim
 
@@ -9,39 +9,40 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PORT=8000 \
-    HOST=0.0.0.0
+    HOST=0.0.0.0 \
+    DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies (minimal)
-RUN apt-get update && apt-get install -y \
+# Install system dependencies (minimal) in single layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+    && apt-get clean \
+    && apt-get autoremove -y
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first for better caching
-COPY requirements_production.txt ./
+# Copy minimal requirements for faster Railway builds
+COPY requirements_railway.txt ./
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements_production.txt
+# Install Python dependencies with Railway optimizations
+RUN pip install --no-cache-dir --timeout 600 --retries 2 \
+    --index-url https://pypi.org/simple/ \
+    -r requirements_railway.txt
 
-# Copy application files
+# Copy application files in single layer
 COPY backend_api_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 
-# Create models directory - models will be downloaded at runtime
-RUN mkdir -p models
-
-# Create necessary directories
-RUN mkdir -p logs data temp
+# Create all necessary directories in single layer
+RUN mkdir -p models logs data temp
 
 # Expose port (Railway will override this)
 EXPOSE 8000
 
-# Health check for Railway
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+# Simplified health check for Railway
+HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --retries=2 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application

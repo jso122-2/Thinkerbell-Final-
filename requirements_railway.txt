@@ -1,0 +1,15 @@
+# Ultra-Minimal Railway Requirements - Fastest Build
+# Only absolutely essential dependencies
+
+# Web framework (minimal)
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+
+# Essential utilities
+requests==2.31.0
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# ML dependencies (will be installed at runtime if needed)
+# torch and transformers excluded for faster build
