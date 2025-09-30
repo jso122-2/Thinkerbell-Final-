@@ -1,0 +1,48 @@
+# Lightweight Thinkerbell Docker Image for Railway
+# Fast build, small size, basic functionality
+
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    THINKERBELL_ENV=production \
+    PORT=8000
+
+# Install minimal system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create app directory and user
+WORKDIR /app
+RUN groupadd -r thinkerbell && useradd -r -g thinkerbell thinkerbell
+
+# Copy minimal requirements first
+COPY requirements_minimal.txt ./
+
+# Install minimal Python dependencies
+RUN pip install --no-cache-dir -r requirements_minimal.txt
+
+# Copy application files
+COPY backend_api_server.py ./
+COPY simple_webapp.html ./
+
+# Create necessary directories
+RUN mkdir -p /app/models /app/logs /app/temp \
+    && chown -R thinkerbell:thinkerbell /app
+
+# Switch to non-root user
+USER thinkerbell
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start command
+CMD ["uvicorn", "backend_api_server:app", "--host", "0.0.0.0", "--port", "8000"]

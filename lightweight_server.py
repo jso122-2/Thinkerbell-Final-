@@ -84,33 +84,42 @@ class LightweightModelService:
         self._try_load_model()
     
     def _try_load_model(self):
-        """Try to load a lightweight model if dependencies are available"""
+        """Load the actual optimum model"""
         if not HAS_TORCH or not HAS_TRANSFORMERS:
             logger.info("🔄 ML dependencies not available - using mock responses")
             return
         
         try:
-            # Try to load a very lightweight model
-            model_name = "sentence-transformers/all-MiniLM-L6-v2"
-            logger.info(f"🔄 Attempting to load lightweight model: {model_name}")
+            # Load the actual optimum model
+            model_path = os.environ.get("THINKERBELL_MODEL_DIR", "models/optimum-model")
+            logger.info(f"🔄 Loading optimum model from: {model_path}")
             
-            # This would normally load the model, but we'll skip for size constraints
-            # self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-            # self.model = AutoModel.from_pretrained(model_name)
-            # self.model_loaded = True
+            if not os.path.exists(model_path):
+                logger.error(f"❌ Model directory not found: {model_path}")
+                return
             
-            logger.info("⚠️ Skipping model loading to keep image size under 5.5GB")
+            # Load the sentence transformer model
+            from sentence_transformers import SentenceTransformer
+            self.model = SentenceTransformer(model_path)
+            self.model_loaded = True
+            
+            logger.info("✅ Optimum model loaded successfully!")
             
         except Exception as e:
-            logger.error(f"❌ Failed to load model: {e}")
+            logger.error(f"❌ Failed to load optimum model: {e}")
+            logger.info("🔄 Falling back to mock responses")
     
     def encode_texts(self, texts: List[str], normalize: bool = True) -> List[List[float]]:
-        """Generate mock embeddings for texts"""
-        if self.model_loaded and HAS_TORCH:
-            # Real model inference would go here
-            pass
+        """Generate embeddings using the optimum model or fallback to mock"""
+        if self.model_loaded and hasattr(self.model, 'encode'):
+            try:
+                # Use the real optimum model
+                embeddings = self.model.encode(texts, normalize_embeddings=normalize)
+                return embeddings.tolist()
+            except Exception as e:
+                logger.error(f"❌ Model encoding failed: {e}")
         
-        # Mock embeddings (384 dimensions for MiniLM)
+        # Fallback to mock embeddings (384 dimensions for MiniLM)
         import random
         embeddings = []
         for text in texts:
@@ -122,8 +131,21 @@ class LightweightModelService:
         return embeddings
     
     def compute_similarity(self, text1: str, text2: str) -> float:
-        """Compute mock similarity between texts"""
-        # Simple mock similarity based on text length and common words
+        """Compute similarity using optimum model or fallback to mock"""
+        if self.model_loaded and hasattr(self.model, 'encode'):
+            try:
+                # Use real model embeddings
+                embeddings = self.model.encode([text1, text2])
+                # Compute cosine similarity
+                import numpy as np
+                similarity = np.dot(embeddings[0], embeddings[1]) / (
+                    np.linalg.norm(embeddings[0]) * np.linalg.norm(embeddings[1])
+                )
+                return float(similarity)
+            except Exception as e:
+                logger.error(f"❌ Similarity computation failed: {e}")
+        
+        # Fallback to mock similarity based on text length and common words
         words1 = set(text1.lower().split())
         words2 = set(text2.lower().split())
         

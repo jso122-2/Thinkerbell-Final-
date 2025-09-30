@@ -1,0 +1,37 @@
+# Thinkerbell Lightweight Docker Build & Push Commands
+# Fast build (2-3 minutes), smaller size, basic functionality
+
+# 1. Navigate to project directory
+cd /home/black-cat/Documents/Thinkerbell
+
+# 2. Build lightweight image (fast build)
+docker build -f Dockerfile.lightweight -t jacksono/thinkerbell:lightweight -t jacksono/thinkerbell:latest .
+
+# 3. Check built images
+docker images | grep jacksono/thinkerbell
+
+# 4. Test locally (optional)
+docker run -d -p 8000:8000 --name thinkerbell-test jacksono/thinkerbell:latest
+
+# 5. Check if it's working
+curl http://localhost:8000/health
+
+# 6. Stop test container
+docker stop thinkerbell-test && docker rm thinkerbell-test
+
+# 7. Login to Docker Hub
+docker login
+
+# 8. Push lightweight tag
+docker push jacksono/thinkerbell:lightweight
+
+# 9. Push latest tag  
+docker push jacksono/thinkerbell:latest
+
+# 10. Verify push success
+docker search jacksono/thinkerbell
+
+# For Railway deployment:
+# Image: jacksono/thinkerbell:latest
+# Port: 8000
+# Note: This version has basic functionality without heavy ML dependencies
