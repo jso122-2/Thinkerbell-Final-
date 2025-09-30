@@ -36,10 +36,14 @@ except ImportError as e:
 # Configuration
 MODEL_DIR = os.environ.get(
     "THINKERBELL_MODEL_DIR", 
-    "models/optimum-model"
+    "models/thinkerbell-encoder-best"
 )
 PORT = int(os.environ.get("PORT", 8000))
 HOST = os.environ.get("HOST", "0.0.0.0")
+ENV = os.environ.get("THINKERBELL_ENV", "development")
+
+# Production model fallback
+FALLBACK_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 # Pydantic Models
 class EmbedRequest(BaseModel):
@@ -153,18 +157,31 @@ class ModelService:
         self.load_model()
     
     def load_model(self) -> bool:
-        """Load the trained model"""
+        """Load the trained model with production fallback"""
         if not HAS_ML_DEPS:
             logger.error("ML dependencies not available")
             return False
         
+        # Try to load custom model first
         try:
-            logger.info(f"Loading model from: {self.model_path}")
-            self.model = SentenceTransformer(self.model_path)
-            logger.info(f"Model loaded successfully! Dimension: {self.model.get_sentence_embedding_dimension()}")
+            if os.path.exists(self.model_path):
+                logger.info(f"Loading custom model from: {self.model_path}")
+                self.model = SentenceTransformer(self.model_path)
+                logger.info(f"Custom model loaded successfully! Dimension: {self.model.get_sentence_embedding_dimension()}")
+                return True
+            else:
+                logger.warning(f"Custom model not found at: {self.model_path}")
+        except Exception as e:
+            logger.error(f"Failed to load custom model: {e}")
+        
+        # Fallback to production model
+        try:
+            logger.info(f"Loading fallback model: {FALLBACK_MODEL}")
+            self.model = SentenceTransformer(FALLBACK_MODEL)
+            logger.info(f"Fallback model loaded successfully! Dimension: {self.model.get_sentence_embedding_dimension()}")
             return True
         except Exception as e:
-            logger.error(f"Failed to load model: {e}")
+            logger.error(f"Failed to load fallback model: {e}")
             return False
     
     def encode_texts(self, texts: List[str], normalize: bool = True) -> np.ndarray:

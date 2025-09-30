@@ -1,0 +1,81 @@
+RAILWAY ENVIRONMENT VARIABLES FOR DEPLOYMENT
+==============================================
+
+Copy and paste these variables into Railway Dashboard:
+Go to: Railway Dashboard → Your Service → Variables Tab
+
+VARIABLE NAME: THINKERBELL_ENV
+VALUE: production
+
+VARIABLE NAME: PORT
+VALUE: 8000
+
+VARIABLE NAME: HOST
+VALUE: 0.0.0.0
+
+VARIABLE NAME: THINKERBELL_MODEL_DIR
+VALUE: /app/models/thinkerbell-encoder-best
+
+VARIABLE NAME: PYTHONUNBUFFERED
+VALUE: 1
+
+VARIABLE NAME: PYTHONDONTWRITEBYTECODE
+VALUE: 1
+
+VARIABLE NAME: WEB_CONCURRENCY
+VALUE: 1
+
+==============================================
+OPTIONAL PRODUCTION SECURITY VARIABLES:
+==============================================
+
+VARIABLE NAME: CORS_ORIGINS
+VALUE: https://yourdomain.com
+
+VARIABLE NAME: API_KEY_REQUIRED
+VALUE: false
+
+VARIABLE NAME: RATE_LIMIT_ENABLED
+VALUE: true
+
+VARIABLE NAME: RATE_LIMIT_REQUESTS
+VALUE: 100
+
+VARIABLE NAME: RATE_LIMIT_WINDOW
+VALUE: 3600
+
+==============================================
+RAILWAY CLI ALTERNATIVE (if you prefer):
+==============================================
+
+railway variables set THINKERBELL_ENV production
+railway variables set PORT 8000
+railway variables set HOST 0.0.0.0
+railway variables set THINKERBELL_MODEL_DIR /app/models/thinkerbell-encoder-best
+railway variables set PYTHONUNBUFFERED 1
+railway variables set PYTHONDONTWRITEBYTECODE 1
+railway variables set WEB_CONCURRENCY 1
+
+==============================================
+BUILD CONFIGURATION:
+==============================================
+
+Builder: Dockerfile
+Dockerfile Path: Dockerfile.railway
+Build Command: (leave empty)
+Start Command: python backend_api_server.py
+Health Check Path: /health
+Health Check Timeout: 300
+
+==============================================
+NOTES:
+==============================================
+
+1. In Railway Dashboard Variables Tab:
+   - Enter VARIABLE NAME in the "Name" field
+   - Enter VALUE in the "Value" field
+   - DO NOT include the "=" sign - Railway handles this automatically
+
+2. Required variables are the first 7 listed above
+3. Optional variables can be added for enhanced security
+4. Railway will automatically restart your service after adding variables

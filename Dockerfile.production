@@ -1,0 +1,57 @@
+# Production Thinkerbell Docker Image with Full AI Functionality
+# Optimized for Railway and cloud deployment
+
+# Use Python 3.11 slim as base
+FROM python:3.11-slim as base
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    THINKERBELL_ENV=production
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create app directory and user
+WORKDIR /app
+RUN groupadd -r thinkerbell && useradd -r -g thinkerbell thinkerbell
+
+# Copy requirements first for better caching
+COPY requirements_production.txt ./
+
+# Install Python dependencies with optimizations
+RUN pip install --no-cache-dir --timeout 600 --retries 5 \
+    -r requirements_production.txt
+
+# Copy application files
+COPY backend_api_server.py ./
+COPY simple_webapp.html ./
+COPY requirements/ ./requirements/
+COPY config/ ./config/
+COPY style_profiles/ ./style_profiles/
+
+# Models will be downloaded at runtime
+
+# Create necessary directories
+RUN mkdir -p /app/models /app/logs /app/temp \
+    && chown -R thinkerbell:thinkerbell /app
+
+# Switch to non-root user
+USER thinkerbell
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start command optimized for Railway
+CMD ["uvicorn", "backend_api_server:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--timeout-keep-alive", "30"]

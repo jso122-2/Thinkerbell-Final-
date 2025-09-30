@@ -93,8 +93,8 @@ COPY --from=dependencies /usr/local/bin /usr/local/bin
 # Copy application from application stage
 COPY --from=application --chown=thinkerbell:thinkerbell /app /app
 
-# Create volume mount points
-VOLUME ["/app/logs", "/app/data", "/app/models"]
+# Note: Railway doesn't support VOLUME keyword - use Railway volumes instead
+# Directories are created as regular directories
 
 # Expose port
 EXPOSE 8000
