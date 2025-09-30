@@ -34,3 +34,4 @@ pyyaml>=6.0
 
 # Async support
 aiofiles>=23.0.0
+

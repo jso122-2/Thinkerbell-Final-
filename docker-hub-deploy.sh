@@ -368,3 +368,4 @@ trap 'error "Deployment failed at line $LINENO"' ERR
 
 # Run main function
 main "$@"
+
