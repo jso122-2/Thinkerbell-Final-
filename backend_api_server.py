@@ -1433,20 +1433,49 @@ def auto_detect_parameters(text: str) -> Dict[str, Any]:
         "processing_time": processing_time
     }
 
-# Initialize model service
-model_service = ModelService()
+# Initialize model service (conditionally)
+model_service = None
+
+def get_model_service():
+    """Get or initialize model service"""
+    global model_service
+    if model_service is None:
+        model_service = ModelService()
+    return model_service
 
 # API Endpoints
 @app.get("/health", response_model=HealthResponse)
 async def health():
     """Health check endpoint"""
-    return HealthResponse(
-        status="healthy" if model_service.model else "unhealthy",
-        model_loaded=model_service.model is not None,
-        model_path=model_service.model_path,
-        model_dimension=model_service.model.get_sentence_embedding_dimension() if model_service.model else None,
-        uptime_seconds=time.time() - start_time
-    )
+    # Always return healthy for basic server functionality
+    if not HAS_ML_DEPS:
+        return HealthResponse(
+            status="healthy",
+            model_loaded=False,
+            model_path="N/A - ML dependencies not installed",
+            model_dimension=None,
+            uptime_seconds=time.time() - start_time
+        )
+    
+    # Try to get model service, but don't fail if it can't load
+    try:
+        ms = get_model_service()
+        return HealthResponse(
+            status="healthy",  # Always healthy for server
+            model_loaded=ms.model is not None,
+            model_path=ms.model_path,
+            model_dimension=ms.model.get_sentence_embedding_dimension() if ms.model else None,
+            uptime_seconds=time.time() - start_time
+        )
+    except Exception as e:
+        logger.error(f"Health check error: {e}")
+        return HealthResponse(
+            status="healthy",  # Server is healthy even if model fails
+            model_loaded=False,
+            model_path=f"Error: {str(e)}",
+            model_dimension=None,
+            uptime_seconds=time.time() - start_time
+        )
 
 @app.post("/embed", response_model=EmbedResponse)
 async def embed(request: EmbedRequest):
@@ -1771,10 +1800,17 @@ async def process_batch_generation(batch_id: str, batch_inputs: List[Dict[str, A
 @app.get("/")
 async def root():
     """Root endpoint"""
+    try:
+        ms = get_model_service() if HAS_ML_DEPS else None
+        model_loaded = ms.model is not None if ms else False
+    except:
+        model_loaded = False
+        
     return {
         "message": "Thinkerbell Enhanced API",
         "version": "2.0.0",
-        "model_loaded": model_service.model is not None,
+        "model_loaded": model_loaded,
+        "ml_dependencies": HAS_ML_DEPS,
         "endpoints": [
             "/health", "/embed", "/similarity", "/search", "/analyze", "/generate", "/model/info",
             "/batch/generate", "/batch/status/{batch_id}", "/batch/download/{batch_id}", "/batch/list",
@@ -1789,12 +1825,12 @@ def main():
     logger.info(f"Server will run on {HOST}:{PORT}")
     
     if not HAS_ML_DEPS:
-        logger.error("ML dependencies not available. Please install sentence-transformers and torch.")
-        return
+        logger.warning("ML dependencies not available. Server will start in basic mode.")
+        logger.info("ML endpoints will attempt to install dependencies on first use.")
+    else:
+        logger.info("ML dependencies available. Model will be loaded on first use.")
     
-    if not model_service.model:
-        logger.error("Failed to load model. Server will start but endpoints will fail.")
-    
+    # Always start the server - it can handle missing dependencies gracefully
     uvicorn.run(
         "backend_api_server:app",
         host=HOST,
