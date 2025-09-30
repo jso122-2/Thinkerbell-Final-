@@ -1,0 +1,19 @@
+# Ultra-minimal requirements for Railway (under 5.5GB limit)
+# Core web framework
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+
+# Essential utilities
+requests==2.31.0
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Minimal ML stack (CPU-only, no CUDA)
+torch==2.1.0+cpu
+numpy==1.24.3
+
+# Skip heavy dependencies for now:
+# transformers (400MB+)
+# sentence-transformers (depends on transformers)
+# scikit-learn (100MB+)

@@ -3,7 +3,7 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile.railway"
 
 [deploy]
-startCommand = "python full_thinkerbell_server.py"
+startCommand = "python lightweight_server.py"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "always"

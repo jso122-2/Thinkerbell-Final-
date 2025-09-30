@@ -22,16 +22,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set working directory
 WORKDIR /app
 
-# Copy minimal requirements for faster Railway builds
-COPY requirements_railway.txt ./
+# Copy minimal requirements for Railway size limit
+COPY requirements_minimal.txt ./
 
-# Install Python dependencies with Railway optimizations
+# Install minimal Python dependencies (under 5.5GB limit)
 RUN pip install --no-cache-dir --timeout 600 --retries 2 \
-    --index-url https://pypi.org/simple/ \
-    -r requirements_railway.txt
+    --extra-index-url https://download.pytorch.org/whl/cpu \
+    -r requirements_minimal.txt && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/*
 
-# Copy only essential application files in single layer
-COPY full_thinkerbell_server.py ./
+# Copy lightweight server optimized for Railway
+COPY lightweight_server.py ./
 COPY config/ ./config/
 COPY style_profiles/ ./style_profiles/
 COPY static/ ./static/
@@ -48,4 +53,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:${PORT:-8000}/health || curl -f http://127.0.0.1:${PORT:-8000}/health || exit 1
 
 # Run working server that handles missing static files
-CMD ["python", "working_server.py"]
+CMD ["python", "lightweight_server.py"]
